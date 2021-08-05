@@ -1,6 +1,9 @@
-package org.moon.frangura;
+package org.moon.frangura.lua;
 import com.google.common.base.Charsets;
 import org.apache.commons.io.IOUtils;
+import org.moon.frangura.FranguraMod;
+import org.moon.frangura.assets.FranguraAsset;
+import org.moon.frangura.lua.api.FileAPI;
 import org.terasology.jnlua.*;
 
 import java.io.File;
@@ -10,42 +13,47 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
+import java.util.Optional;
 
-public class LuaScript {
+public class LuaScript extends FranguraAsset {
 
-    private LuaState53 state;
-    private final Path scriptPath;
+
+    protected LuaState53 state;
 
     public LuaScript(String scriptName) {
+        super(FranguraMod.getModDirectory().resolve(scriptName));
         state = new LuaState53();
-        scriptPath = FranguraMod.getModDirectory().resolve(scriptName);
-        setupGlobals();
-        load();
-    }
 
-    private void load() {
-        try(InputStream inputStream = new FileInputStream(scriptPath.toFile())) {
-            String scriptContent = IOUtils.toString(inputStream, Charsets.UTF_8);
+        Optional<InputStream> assetStream = getInputStream();
+        if (assetStream.isPresent()) {
+            try {
+                String scriptContent = IOUtils.toString(assetStream.get(), Charsets.UTF_8);
 
-            state.load(scriptContent, scriptPath.getFileName().toString());
-            state.call(0, 0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (LuaException e) {
-            System.err.printf("LuaError! %s", e);
-        }
+                // Initialize script
+                setupGlobals();
+                state.load(scriptContent, path.getFileName().toString());
+                state.call(0, 0);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.printf("[Frangura] Failed to load script \"%s\"!\n", path.getFileName().toString());
+            } catch (LuaException f) {
+                f.printStackTrace();
+                System.out.println("[Frangura] Script threw an exception on load!");
+            }
+        } else System.out.printf("[Frangura] Failed to load script \"%s\"!\n", path.getFileName().toString());
     }
 
     private void setupGlobals() {
-        addJavaFunction("log", new JavaFunction() {
-            @Override
-            public int invoke(LuaState luaState) {
-                String s = luaState.checkString(1);
-                System.out.printf("Fragura >> %s\n", s);
-                return 0;
-            }
+        addJavaFunction("log", luaState -> {
+            String s = luaState.checkString(1);
+            System.out.printf("Fragura >> %s\n", s);
+            return 0;
         });
+        addAPI("file", new FileAPI());
+    }
+    private void addAPI(String name, Object object) {
+        state.pushJavaObject(object);
+        state.setGlobal(name);
     }
 
     public void addJavaFunction(String name, JavaFunction j) {

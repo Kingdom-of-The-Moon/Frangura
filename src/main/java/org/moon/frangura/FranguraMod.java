@@ -2,11 +2,19 @@ package org.moon.frangura;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.moon.frangura.config.Config;
+import org.moon.frangura.lua.LuaScript;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class FranguraMod implements ClientModInitializer {
+
+	public static final Logger LOGGER = LogManager.getLogger();
+
+
 	@Override
 	public void onInitializeClient() {
 		try {
@@ -14,6 +22,8 @@ public class FranguraMod implements ClientModInitializer {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+
+		Config.initialize();
 	}
 
 	public static Path getModDirectory() {
