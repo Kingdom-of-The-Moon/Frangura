@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "frangura",
+  "version": "${version}",
+
+  "name": "Frangura",
+  "description": "figua but awesome",
+  "authors": [
+    "Francy-Chan",
+    "omoflop"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Kingdom-of-Moon/Frangura",
+    "sources": "https://github.com/Kingdom-of-Moon/Frangura",
+    "issues": "https://github.com/Kingdom-of-Moon/Frangura/issues"
+  },
+
+  "license": "LGPL-2.1",
+  "icon": "assets/frangura/icon.png",
+
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "org.moon.frangura.FranguraMod"
+    ],
+    "modmenu": [
+      "org.moon.frangura.config.ModMenuConfig"
+    ]
+  },
+  "mixins": [
+    "frangura.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "minecraft": "1.17.x",
+    "java": ">=16"
+  }
+}
