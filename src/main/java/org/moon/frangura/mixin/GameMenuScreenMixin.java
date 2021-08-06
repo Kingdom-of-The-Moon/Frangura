@@ -8,6 +8,7 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.moon.frangura.gui.ModelSelectionScreen;
+import org.moon.frangura.lua.LuaScript;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,7 +24,7 @@ public class GameMenuScreenMixin extends Screen {
         super(title);
     }
 
-    @Inject(at = @At("RETURN"), method = "initWidgets")
+    @Inject(method = "initWidgets", at = @At("RETURN"), require = 1)
     void initWidgets(CallbackInfo ci) {
         if (frangura$screen == null)
             frangura$screen = new ModelSelectionScreen(this);
@@ -33,11 +34,13 @@ public class GameMenuScreenMixin extends Screen {
         // if modmenu button exists
         y -= 12;
 
+        new LuaScript("test.lua");
 
         Identifier icon = new Identifier("frangura:textures/gui/logo.png");
-        addDrawable(new TexturedButtonWidget(x, y, 20, 20, 0, 0, 20, icon, 20, 40, btn -> {
-            this.client.setScreen(frangura$screen);
-        }
+        addDrawableChild(new TexturedButtonWidget(x, y, 20, 20, 0, 0, 20, icon, 20, 40,
+            btn -> {
+                this.client.setScreen(frangura$screen);
+            }
         ));
     }
 

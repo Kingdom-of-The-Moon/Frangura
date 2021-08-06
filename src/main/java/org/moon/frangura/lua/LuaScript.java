@@ -1,9 +1,15 @@
 package org.moon.frangura.lua;
 import com.google.common.base.Charsets;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.apache.commons.io.IOUtils;
 import org.moon.frangura.FranguraMod;
 import org.moon.frangura.assets.FranguraAsset;
 import org.moon.frangura.lua.api.FileAPI;
+import org.moon.frangura.lua.api.VectorAPI;
 import org.terasology.jnlua.*;
 
 import java.io.File;
@@ -43,13 +49,23 @@ public class LuaScript extends FranguraAsset {
         } else System.out.printf("[Frangura] Failed to load script \"%s\"!\n", path.getFileName().toString());
     }
 
+    private static final MutableText PREFIX = new LiteralText("Frangura >> ").formatted(Formatting.byColorIndex(9), Formatting.ITALIC);
+
     private void setupGlobals() {
         addJavaFunction("log", luaState -> {
-            String s = luaState.checkString(1);
-            System.out.printf("Fragura >> %s\n", s);
+            String s = luaState.toString(1);
+            FranguraMod.LOGGER.info("Frangura >> %s\n", s);
+            MinecraftClient c = MinecraftClient.getInstance();
+            if (c != null) {
+                if (c.player != null) {
+                    MutableText logMessage = new LiteralText(s).formatted(Formatting.WHITE, Formatting.RESET);
+                    c.player.sendMessage(PREFIX.copy().append(logMessage), false);
+                }
+            }
             return 0;
         });
         addAPI("file", new FileAPI());
+        addAPI("vectors", new VectorAPI());
     }
     private void addAPI(String name, Object object) {
         state.pushJavaObject(object);
