@@ -36,8 +36,7 @@ public class GameMenuScreenMixin extends Screen {
 
         new LuaScript("test.lua");
 
-        Identifier icon = new Identifier("frangura:textures/gui/logo.png");
-        addDrawableChild(new TexturedButtonWidget(x, y, 20, 20, 0, 0, 20, icon, 20, 40,
+        addDrawableChild(new TexturedButtonWidget(x, y, 20, 20, 0, 32, 20, ModelSelectionScreen.iconsTexture, 256, 256,
             btn -> {
                 this.client.setScreen(frangura$screen);
             }

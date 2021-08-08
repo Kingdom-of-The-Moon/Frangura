@@ -1,0 +1,11 @@
+{
+  "gui.frangura.button.tooltip.reload":      "Reload avatar",
+  "gui.frangura.button.tooltip.upload":      "Upload avatar",
+  "gui.frangura.button.tooltip.download":    "Download avatar from server",
+  "gui.frangura.button.tooltip.delete":      "Delete avatar from server",
+  "gui.frangura.button.tooltip.enlarge":     "Enlarge preview",
+  "gui.frangura.button.tooltip.help":        "Help menu",
+  "gui.frangura.button.tooltip.settings":    "Settings",
+  "gui.frangura.button.tooltip.keybindings": "Avatar keybindings",
+  "gui.frangura.button.tooltip.trust":       "Trust settings"
+}
