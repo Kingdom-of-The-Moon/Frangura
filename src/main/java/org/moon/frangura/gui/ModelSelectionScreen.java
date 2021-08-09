@@ -25,6 +25,7 @@ import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 import org.moon.frangura.FranguraMod;
+import org.moon.frangura.config.ConfigScreen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -119,7 +120,7 @@ public class ModelSelectionScreen extends Screen {
         this.downloadButton    = makeButton(x, y*3,  60, 32, downloadButtonTooltip,    (b) -> {});
         this.deleteButton      = makeButton(x, y*4, 100, 32, deleteButtonTooltip,      (b) -> {});
         this.helpButton        = makeButton(x, y*6, 140, 32, helpButtonTooltip,        (b) -> {});
-        this.settingsButton    = makeButton(x, y*7, 160, 32, settingsButtonTooltip,    (b) -> {});
+        this.settingsButton    = makeButton(x, y*7, 160, 32, settingsButtonTooltip,    (b) -> this.client.setScreen(new ConfigScreen(this)));
         this.keybindingsButton = makeButton(x, y*8, 200, 32, keybindingsButtonTooltip, (b) -> {});
         this.trustButton       = makeButton(x, y*9, 220, 32, trustButtonTooltip,       (b) -> {});
 
@@ -210,8 +211,6 @@ public class ModelSelectionScreen extends Screen {
                 float size = modelSelectorSize/Math.round(zoomFactor);
                 int visibleRows = (int)Math.floor(modelList.length / Math.round(zoomFactor))+1;
                 int maxRows = (int) ((height+31) / size) - 1;
-
-                System.out.printf("%s/%s\n",visibleRows,maxRows);
 
                 float maxScroll = -Math.max(visibleRows, maxRows)*size + (maxRows)*size;
                 scroll = Math.min(0, Math.max(scroll,maxScroll));

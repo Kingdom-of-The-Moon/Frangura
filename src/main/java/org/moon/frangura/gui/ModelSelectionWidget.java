@@ -12,6 +12,7 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
+import org.moon.frangura.config.Config;
 
 public class ModelSelectionWidget extends PressableWidget {
 
@@ -65,8 +66,10 @@ public class ModelSelectionWidget extends PressableWidget {
         fill(matrices, x+1, y, x+width-1, y+1, colA);
         fill(matrices, x+1, y+height-1, x+width-1, y+height, colB);
 
-        // Draw entity (for now, just draws the player)
-        DrawUtils.drawEntity(x + width/2, y + height/2,600.0f, Math.min(width,height)/3f,-30, 22.5f, previewEntity);
+        if ((Boolean) Config.entries.get("showModelPreview").value) {
+            // Draw entity (for now, just draws the player)
+            DrawUtils.drawEntity(x + width/2, y + height/2,600.0f, Math.min(width,height)/3f,-30, 22.5f, previewEntity);
+        }
 
         matrices.push();
         matrices.translate(0, 0, 100);
@@ -81,7 +84,6 @@ public class ModelSelectionWidget extends PressableWidget {
         } else {
             String trimmed = textRenderer.getTextHandler().trimToWidth(modelLabel, this.width, Style.EMPTY);
             drawCenteredTextWithShadow(matrices, this.textRenderer, new LiteralText(trimmed).asOrderedText(), x + width/2, y+height-10, s ?  modelBoxSelectedTextColor : modelBoxTextColor);
-
         }
 
         matrices.pop();

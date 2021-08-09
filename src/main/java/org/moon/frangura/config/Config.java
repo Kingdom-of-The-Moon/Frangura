@@ -99,6 +99,7 @@ public class Config {
 
     public static void setDefaults() {
         entries.clear();
+        entries.put("showModelPreview", new ConfigEntry(true));
     }
 
     public static class ConfigEntry<T> {

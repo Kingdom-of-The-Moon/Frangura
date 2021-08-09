@@ -7,6 +7,7 @@ import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.moon.frangura.CustomPlayerModel;
 import org.moon.frangura.gui.ModelSelectionScreen;
 import org.moon.frangura.lua.LuaScript;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,7 +35,7 @@ public class GameMenuScreenMixin extends Screen {
         // if modmenu button exists
         y -= 12;
 
-        new LuaScript("test.lua");
+        new CustomPlayerModel("testmodel");
 
         addDrawableChild(new TexturedButtonWidget(x, y, 20, 20, 0, 32, 20, ModelSelectionScreen.iconsTexture, 256, 256,
             btn -> {

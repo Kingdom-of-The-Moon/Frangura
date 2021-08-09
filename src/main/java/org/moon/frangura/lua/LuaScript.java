@@ -40,11 +40,9 @@ public class LuaScript extends FranguraAsset {
                 state.load(scriptContent, path.getFileName().toString());
                 state.call(0, 0);
             } catch (IOException e) {
-                e.printStackTrace();
-                System.out.printf("[Frangura] Failed to load script \"%s\"!\n", path.getFileName().toString());
+                System.out.printf("[Frangura] Failed to load script \"%s\"!\n%s\n", path.getFileName().toString(), e.getCause());
             } catch (LuaException f) {
-                f.printStackTrace();
-                System.out.println("[Frangura] Script threw an exception on load!");
+                System.out.println("[Frangura] Script threw an exception on load!\n%s".formatted(f.getCause()));
             }
         } else System.out.printf("[Frangura] Failed to load script \"%s\"!\n", path.getFileName().toString());
     }
@@ -65,7 +63,9 @@ public class LuaScript extends FranguraAsset {
             return 0;
         });
         addAPI("file", new FileAPI());
-        addAPI("vectors", new VectorAPI());
+
+        state.pushJavaObject(new VectorAPI());
+        state.setGlobal("vectors");
     }
     private void addAPI(String name, Object object) {
         state.pushJavaObject(object);
